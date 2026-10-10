@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GAIA Agent</title>
+<style>
+  :root { --bg: #ffffff; --fg: #1f2328; --muted: #57606a; --link: #0969da; --card: #f6f8fa; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0d1117; --fg: #e6edf3; --muted: #8d96a0; --link: #4493f8; --card: #161b22; } }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, sans-serif; margin: 0; padding: 32px 16px; }
+  main { max-width: 760px; margin: 0 auto; }
+  a { color: var(--link); }
+  code { background: var(--card); padding: 1px 5px; border-radius: 4px; }
+  li { margin: 4px 0; }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>GAIA Agent: Agents Course Unit 4</h1>
+  <p>Source code of a tool-calling research agent for the Hugging Face Agents Course final assignment
+     (20 GAIA level-1 questions). The agent runs locally; this static Space hosts the code.</p>
+  <p><a href="https://huggingface.co/spaces/bekbolsun446/gaia-final-assignment/tree/main">Browse the code</a>.
+     Setup, commands, architecture and limitations are in the README.</p>
+  <h2>Files</h2>
+  <ul>
+    <li><code>gaia_agent/agent.py</code>: agent loop (OpenAI Responses API or Gemini) and answer extraction</li>
+    <li><code>gaia_agent/tools.py</code>: search, web/PDF fetch, Wikipedia (dated revisions), sandboxed Python, attachments, media</li>
+    <li><code>gaia_agent/llm_openai.py</code>, <code>gaia_agent/llm.py</code>: model clients, retries, cost tracking and budget cap</li>
+    <li><code>gaia_agent/scoring_api.py</code>: course scoring API client and payload validation</li>
+    <li><code>cli.py</code>: fetch / smoke / run / review / validate / submit</li>
+    <li><code>app.py</code>: the course template's Gradio UI wired to this agent</li>
+    <li><code>tests/test_offline.py</code>: offline tests</li>
+  </ul>
+  <p class="muted">No API keys, run logs or answers are published here.</p>
+</main>
+</body>
+</html>

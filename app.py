@@ -8,16 +8,28 @@ import pandas as pd
 # --- Constants ---
 DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 
-# --- Basic Agent Definition ---
-# ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
+# --- Agent Definition ---
+# The agent lives in gaia_agent/ (tool-calling research agent on Gemini). Locally, prefer `python cli.py ...`
+# (resumable runs, saved answers, separate submission); this Gradio app keeps the course template flow.
+from pathlib import Path
+
+from gaia_agent.agent import GaiaAgent
+from gaia_agent.config import Settings
+from gaia_agent.scoring_api import download_attachment
+
+
 class BasicAgent:
     def __init__(self):
-        print("BasicAgent initialized.")
-    def __call__(self, question: str) -> str:
-        print(f"Agent received question (first 50 chars): {question[:50]}...")
-        fixed_answer = "This is a default answer."
-        print(f"Agent returning fixed answer: {fixed_answer}")
-        return fixed_answer
+        self.settings = Settings()
+        self.agent = GaiaAgent(self.settings)
+        print(f"GaiaAgent initialized with model {self.settings.model}.")
+
+    def __call__(self, question: str, task_id: str = "", file_name: str = "") -> str:
+        attachment = None
+        if task_id and file_name:
+            attachment = download_attachment(self.settings.api_url, task_id, file_name,
+                                             Path(self.settings.runs_dir) / "files" / task_id)
+        return self.agent(question, attachment)
 
 def run_and_submit_all( profile: gr.OAuthProfile | None):
     """
@@ -80,7 +92,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             print(f"Skipping item with missing task_id or question: {item}")
             continue
         try:
-            submitted_answer = agent(question_text)
+            submitted_answer = agent(question_text, task_id, item.get("file_name") or "")
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
         except Exception as e:

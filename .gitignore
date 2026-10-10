@@ -1,0 +1,19 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.token
+
+# Environments / caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+
+# Generated private run data (answers, traces, downloaded attachments, server responses)
+runs/
+data/
+*.log
+.DS_Store
